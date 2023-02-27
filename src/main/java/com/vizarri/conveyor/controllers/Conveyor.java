@@ -13,6 +13,7 @@ import java.util.List;
 public class Conveyor {
     @PostMapping("/conveyor/offers")
     public List<LoanOfferDTO> calculatePossibleLoanTerms(LoanApplicationRequestDTO loanApplicationRequestDTO) {
+
     return null;
     }
     @PostMapping("/conveyor/calculation")
