@@ -7,6 +7,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ConveyorException {
+public class ConveyorException extends RuntimeException {
     private String info;
 }
