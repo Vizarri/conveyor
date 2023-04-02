@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -18,10 +19,14 @@ public class CounterPossibleLoanTerms {
     BigDecimal basicRate;
 
     public List<LoanOfferDTO> getPossibleLoanTerms(LoanApplicationRequestDTO loanApplicationRequestDTO) {
-        List<LoanOfferDTO> possibleLoanTerms = new ArrayList<>();
         if (loanApplicationRequestDTO == null) {
             throw new ConveyorException();
         }
+        return generatePossibleLoanTerms(loanApplicationRequestDTO);
+    }
+
+    private List<LoanOfferDTO> generatePossibleLoanTerms(LoanApplicationRequestDTO loanApplicationRequestDTO) {
+        List<LoanOfferDTO> possibleLoanTerms = new ArrayList<>();
         possibleLoanTerms.add(
                 LoanOfferDTO.builder()
                         .requestedAmount(loanApplicationRequestDTO.getAmount())
@@ -62,6 +67,7 @@ public class CounterPossibleLoanTerms {
                         .isInsuranceEnabled(false)
                         .isSalaryClient(true)
                         .build());
+        possibleLoanTerms.sort(Comparator.comparing(m -> m.getRate().intValue()));
         return possibleLoanTerms;
     }
 
