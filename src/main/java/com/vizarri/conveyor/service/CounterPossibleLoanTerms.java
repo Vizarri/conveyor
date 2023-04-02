@@ -23,7 +23,6 @@ public class CounterPossibleLoanTerms {
         if (loanApplicationRequestDTO == null) {
             throw new ConveyorException();
         }
-/*
         possibleLoanTerms.add(
                 LoanOfferDTO.builder()
                         .requestedAmount(loanApplicationRequestDTO.getAmount())
@@ -54,7 +53,6 @@ public class CounterPossibleLoanTerms {
                         .isInsuranceEnabled(true)
                         .isSalaryClient(false)
                         .build());
-*/
         possibleLoanTerms.add(
                 LoanOfferDTO.builder()
                         .requestedAmount(loanApplicationRequestDTO.getAmount())
@@ -69,12 +67,9 @@ public class CounterPossibleLoanTerms {
     }
 
     private BigDecimal countMonthlyPayment(Integer term, BigDecimal requestedAmount, BigDecimal basicRate) {
-        System.out.println(term);
-        System.out.println(requestedAmount);
-        System.out.println(basicRate);
-        double a = basicRate.doubleValue() / 12D / 100D;
-        BigDecimal rateInMonth = BigDecimal.valueOf(basicRate.doubleValue() / 12D / 100D);
-        BigDecimal monthlyPayment = rateInMonth.multiply(rateInMonth.add(BigDecimal.valueOf(1D))).pow(term).divide((BigDecimal.valueOf(1D).add(rateInMonth)).pow(term).subtract(BigDecimal.valueOf(1D)), RoundingMode.HALF_UP);
-        return monthlyPayment.setScale(3, RoundingMode.HALF_UP);
+        BigDecimal rateInMonth = BigDecimal.valueOf(basicRate.doubleValue() / 12D / 100D).setScale(5, RoundingMode.HALF_UP);
+        double rateInMonthD = rateInMonth.doubleValue();
+        double annuityCoefficient = rateInMonthD * (Math.pow((1 + rateInMonthD), term)) / (Math.pow((1 + rateInMonthD), term) - 1);
+        return requestedAmount.multiply(BigDecimal.valueOf(annuityCoefficient)).setScale(2, RoundingMode.HALF_UP);
     }
 }
